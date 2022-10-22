@@ -43,7 +43,7 @@ class InfoSection():
           
         rs_trigger = regex.search(self.re_trigger, l)
         if rs_trigger:
-            print("TRIGGER=>",l)
+            #print("TRIGGER=>",l)
             #
             # tail-trigger? => add trigger-line as last-line to infos
             if self.mode_tail:
