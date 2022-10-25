@@ -118,6 +118,7 @@ class InfoSection():
                         ## todo: list if re has multiple matches
                         #section_results[f_key].append(rf[1])
                         section_results[f_key]=rf[1]
+                        break   #no need to parse further lines in section
             #
             results.append(section_results)
         return results
