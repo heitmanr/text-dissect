@@ -84,11 +84,38 @@ class InfoSection():
             self.__store_stack()
 
     #
-    # todo: implicit expectation, that "get" is called when all lines are processed, so "close" might be useful
+    # todo: implicit expectation, that "get" is called when all lines are processed, so "close" might be useful <= done
     #
     def get(self):
         self.close()
         return(self.sections)
+
+    #
+    # parse all sections,
+    # - all lines
+    # - against dict of REs
+    #   e.g. Cisco CDP e.g. filters = [ {"key":"platform", "re":r"^Platform\: (.+)\,"}, {"key":"int", "re":r"^Interface\: (.+)\,"} ]
+    # store RE-match-results
+    #
+    def sections_parse(self, filters):
+    results = []
+    # all sections
+    for s in self.get():
+        section_results = {}
+        # all filters
+        for f in filters:
+            f_key = f["key"]
+            f_re = f["re"]
+            for l in s:
+                rf = regex.search(f_re, l)
+                if rf:
+                    if not f_key in section_results:
+                        section_results[f_key]=[]
+                    #todo: list if re has multiple matches
+                    section_results[f_key].append(rf[1])
+        #
+        results.append(section_results)
+    return results
 
 
 def get_info_section_from_txt_file(filename, trigger, re_ignore, tail, encoding="utf-8"):
